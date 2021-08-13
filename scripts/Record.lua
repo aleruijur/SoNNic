@@ -1,6 +1,6 @@
 --[[ BEGIN CONFIGURATION ]]--
-RECORD_EVERY = 10 --Record imput and make a screenshot every # of frames
-PLAY_FOR = 150 --Target imput and screenshots on this session. Game will once goal is reached
+RECORD_EVERY = 10 -- Record imput and make a screenshot every # of frames
+PLAY_FOR = 500 -- Target imput and screenshots on this session. Game will end once goal is reached
 USE_MAPPING = true
 --[[ END CONFIGURATION ]]--
 
@@ -43,7 +43,7 @@ local action={}
 while recording_frame < PLAY_FOR do
     action=joypad.get()
     client.screenshot(RECORDING_FOLDER .. '\\' .. recording_frame .. '.png')
-    steering_file:write(action["P1 X Axis"] .. ',' .. tostring(action["P1 A"]) .. ',' .. tostring(action["P1 B"]) .. '\n')
+    steering_file:write(action["P1 X Axis"] .. '\n')
     steering_file:flush()
     recording_frame = recording_frame + 1
     for i=0, RECORD_EVERY do
