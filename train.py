@@ -74,9 +74,9 @@ def is_validation_set(string):
 def load_training_data(game):
     X_train, y_train = [], []
     X_val, y_val = [], []
-    recordings = glob.iglob("scripts/recordings/*")
+    recordings = glob.iglob("recordings//*")
     for recording in recordings:
-        filenames = list(glob.iglob("*.png"))
+        filenames = list(glob.iglob('{}/*.png'.format(recording)))
         filenames.sort(key=lambda f: int(os.path.basename(f)[:-4]))
 
         steering = [float(line) for line in open(
@@ -85,7 +85,7 @@ def load_training_data(game):
         assert len(filenames) == len(steering), "For recording %s, the number of steering values does not match the number of images." % recording
 
         for file, steer in zip(filenames, steering):
-            assert steer >= -1 and steer <= 1
+            assert steer >= -128 and steer <= 127
 
             valid = is_validation_set(file)
             valid_reversed = is_validation_set(file + '_flipped')
@@ -155,3 +155,4 @@ if __name__ == '__main__':
     earlystopping = EarlyStopping(monitor='val_loss', patience=20)
     model.fit(X_train, y_train, batch_size=batch_size, epochs=epochs,
               shuffle=True, validation_data=(X_val, y_val), callbacks=[checkpointer, earlystopping])
+    model.save("weights/{}.hdf5".format(args.game))

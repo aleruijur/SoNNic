@@ -8,14 +8,14 @@ local util = require("util")
 
 if RECORDING_FOLDER == nil then
   -- Ensure that there is a recordings folder, as well as a subfolder for the current track-mode combination.
-  os.execute('mkdir recordings\\')
+  os.execute('mkdir ..\\recordings\\')
 
   -- Generate a recording id.
   local RECORDING_ID = util.generateUUID()
   print("Recording ID:", RECORDING_ID)
 
   -- Create a folder for this recording.
-  RECORDING_FOLDER = 'recordings\\' .. '\\search-' .. RECORDING_ID
+  RECORDING_FOLDER = '..\\recordings\\' .. '\\search-' .. RECORDING_ID
   os.execute('mkdir ' .. RECORDING_FOLDER)
 
   -- Create an empty steering file that will be appended to.
