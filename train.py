@@ -18,16 +18,6 @@ from keras.callbacks import ModelCheckpoint, EarlyStopping
 
 import matplotlib.pyplot as plt
 
-TRACK_CODES = set(map(lambda s: s.lower(),
-    ["ALL", "MR","CM","BC","BB","YV","FS","KTB","RRy","LR","MMF","TT","KD","SL","RRd","WS",
-     "BF","SS","DD","DK","BD","TC"]))
-
-def is_valid_track_code(value):
-    value = value.lower()
-    if value not in TRACK_CODES:
-        raise argparse.ArgumentTypeError("%s is an invalid track code" % value)
-    return value
-
 OUT_SHAPE = 1
 
 INPUT_WIDTH = 200
@@ -81,15 +71,10 @@ def is_validation_set(string):
     string_hash = hashlib.md5(string.encode('utf-8')).digest()
     return int.from_bytes(string_hash[:2], byteorder='big') / 2**16 > VALIDATION_SPLIT
 
-def load_training_data(track):
+def load_training_data(game):
     X_train, y_train = [], []
     X_val, y_val = [], []
-
-    if track == 'all':
-        recordings = glob.iglob("recordings/*/*/*")
-    else:
-        recordings = glob.iglob("recordings/{}/*/*".format(track))
-
+    recordings = glob.iglob("recordings//*")
     for recording in recordings:
         filenames = list(glob.iglob('{}/*.png'.format(recording)))
         filenames.sort(key=lambda f: int(os.path.basename(f)[:-4]))
@@ -100,7 +85,7 @@ def load_training_data(track):
         assert len(filenames) == len(steering), "For recording %s, the number of steering values does not match the number of images." % recording
 
         for file, steer in zip(filenames, steering):
-            assert steer >= -1 and steer <= 1
+            assert steer >= -128 and steer <= 127
 
             valid = is_validation_set(file)
             valid_reversed = is_validation_set(file + '_flipped')
@@ -139,7 +124,7 @@ def load_training_data(track):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('track', type=is_valid_track_code)
+    parser.add_argument('game')
     parser.add_argument('-c', '--cpu', action='store_true', help='Force Tensorflow to use the CPU.', default=False)
     args = parser.parse_args()
 
@@ -148,7 +133,7 @@ if __name__ == '__main__':
         os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
     # Load Training Data
-    X_train, y_train, X_val, y_val = load_training_data(args.track)
+    X_train, y_train, X_val, y_val = load_training_data(args.game)
 
     print(X_train.shape[0], 'training samples.')
     print(X_val.shape[0], 'validation samples.')
@@ -160,7 +145,7 @@ if __name__ == '__main__':
     model = create_model()
 
     mkdir_p("weights")
-    weights_file = "weights/{}.hdf5".format(args.track)
+    weights_file = "weights/{}.hdf5".format(args.game)
     if os.path.isfile(weights_file):
         model.load_weights(weights_file)
 
@@ -170,3 +155,4 @@ if __name__ == '__main__':
     earlystopping = EarlyStopping(monitor='val_loss', patience=20)
     model.fit(X_train, y_train, batch_size=batch_size, epochs=epochs,
               shuffle=True, validation_data=(X_val, y_val), callbacks=[checkpointer, earlystopping])
+    model.save("weights/{}.hdf5".format(args.game))

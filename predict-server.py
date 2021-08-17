@@ -7,7 +7,7 @@ from socketserver import TCPServer, StreamRequestHandler
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-from train import create_model, is_valid_track_code, INPUT_WIDTH, INPUT_HEIGHT, INPUT_CHANNELS
+from train import create_model, INPUT_WIDTH, INPUT_HEIGHT, INPUT_CHANNELS
 
 def prepare_image(im):
     im = im.resize((INPUT_WIDTH, INPUT_HEIGHT))
@@ -28,9 +28,8 @@ class TCPHandler(StreamRequestHandler):
             message = str(line.strip(),'utf-8')
             logger.debug(message)
 
-            if message.startswith("COURSE:") and not args.all:
-                course = message[7:].strip().lower()
-                weights_file = 'weights/{}.hdf5'.format(course)
+            if message.startswith("START") and not args.all:
+                weights_file = 'weights/{}.hdf5'.format(args.game)
                 logger.info("Loading {}...".format(weights_file))
                 model.load_weights(weights_file)
 
@@ -49,7 +48,8 @@ class TCPHandler(StreamRequestHandler):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Start a prediction server that other apps will call into.')
-    parser.add_argument('-a', '--all', action='store_true', help='Use the combined weights for all tracks, rather than selecting the weights file based off of the course code sent by the Play.lua script.', default=False)
+    parser.add_argument('game')
+    parser.add_argument('-a', '--all', action='store_true', help='Use the combined weights for all games', default=False)
     parser.add_argument('-p', '--port', type=int, help='Port number', default=36296)
     parser.add_argument('-c', '--cpu', action='store_true', help='Force Tensorflow to use the CPU.', default=False)
     args = parser.parse_args()
