@@ -105,10 +105,9 @@ while PLAY_FOR_FRAMES > 0 do
   else
     if message ~= "PREDICTIONERROR" then
       current_action = tonumber(message)
-      print(current_action)
       for i=1, WAIT_FRAMES do
         joypad.set({["P1 A"] = true})
-        joypad.setanalog({["P1 X Axis"] = current_action})
+        joypad.setanalog({["P1 X Axis"] = util.convertSteerToJoystick(current_action, USE_MAPPING)})
         draw_info()
         emu.frameadvance()
       end
