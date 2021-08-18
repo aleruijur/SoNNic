@@ -31,6 +31,7 @@ The following Python **dependencies** need to be installed.
 Although you can run Tensorflow on CPU, I'll recommend you to download and install [TensorFlow GPU](https://www.tensorflow.org/install/gpu) dependencies too.
 
 |TensorFlow|Python|cuDNN|CUDA|
+|----------|------|-----|----|
 |2.2.0|3.5 to 3.8|7.6|10.1|
 
 - [Get CUDA](https://developer.nvidia.com/cuda-toolkit-archive)
@@ -66,18 +67,16 @@ These instructions can be used to run a demo of three tracks that the AI perform
 This should automatically play Mute City time attack race.  You can hit the arrow keys to manually steer the Blue Falcon. This can be used to demonstrate the AI's stability.
 
 ### Generate your own training data
-
-
+`-`
 ### Training the Model on Recordings
 Once you have generated new recording, you probably want to try retraining the weights based off your recordings. To train a new model, run `train.py [model]`. You can also use `--cpu` to force it to use the CPU. Your trained model will be stored on `weights/[model].hdf5`
 
 ### Play your trained model on a race
-
+`-`
 
 ### Train AI to play on another track
-
+`-`
 
 ## Reference Projects
-
 - [NeuralKart](https://github.com/rameshvarun/NeuralKart) - This project was forked from rameshvarun real time Mario Kart AI.
 - [TensorKart](https://github.com/kevinhughes27/TensorKart) - The first MarioKart deep learning project, used for reference.
