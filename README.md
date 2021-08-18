@@ -1,34 +1,34 @@
-# NeuralKart - A Real-time Mario Kart AI using CNNs, Offline Search, and DAGGER
+# N-ZeroX
+(Neural)-Zero X is an AI that can play F-Zero X on BizHawk emulator using real time CNNs.
+This repository is part of a Universidad de Sevilla's final degree project.
 
 <p align="center">
-  <img src="./demo.gif"/>
+  <img src="./train.gif"/>
 </p>
 
-- [Explanation Video](https://www.youtube.com/watch?v=Eo07BAsyQ24)
-- [Videos of Runs](https://www.youtube.com/playlist?list=PLSHD7WB3aI6Ks04Z7kS_UskyG_uY02EzY)
-- [Class Poster](https://drive.google.com/open?id=0B7KSCOuXHAaQcE8wWXZmRVhjX2c)
-- [Class Writeup](https://drive.google.com/open?id=0B7KSCOuXHAaQb1FtY2wzUS1yZ0E)
+- [Watch the AI playing](https://www.youtube.com/)
+- [Final Degree Project document](https://drive.google.com/)
 
 ## Set-up
 
-The project currently only works on Windows.
+To run this project, you need Python 3 and Bizhawk emulator.
 
 ### Install 64-bit Python 3
-This project was written for Python 3. Furthermore, Tensorflow requires 64-bit Python.
+This project was written for [Python 3.7](https://www.python.org/ftp/python/3.7.9/python-3.7.9-amd64.exe). Tensorflow requires 64-bit Python.
 
 ### Install Python Dependencies
 The following Python dependencies need to be installed.
 
-- Tensorflow
-- Keras
+- Tensorflow 2.2.0
+- Keras 2.3.1
 - Pillow
 - matplotlib
 - mkdir_p
 - h5py
 
-### Get BizHawk (1.12.2)
+### Get BizHawk
 
-Our scripts are all written for the BizHawk emulator (tested in version 1.12.2), which has embedded Lua scripting. To get BizHawk you first need to install the prerequisites - https://github.com/TASVideos/BizHawk-Prereqs/releases/tag/1.4. Then you can download BizHawk (version 1.12.2) and unzip it to any directory - https://github.com/TASVideos/BizHawk/releases/tag/1.12.2
+This project contains LUA script files ready to run on BizHawk emulator (tested on version 2.6.2). To get BizHawk you first need to install the [prerequisites](https://github.com/TASVideos/BizHawk-Prereqs/releases/tag/2.4.8_1). Then you can download [BizHawk](https://github.com/TASVideos/BizHawk/releases/tag/2.6.2) and unzip it to any directory.
 
 ### Download Our Pre-trained Weights and Recordings
 These should be unzipped into the folder of the repo.
