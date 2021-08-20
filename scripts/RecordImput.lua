@@ -1,6 +1,6 @@
 --[[ BEGIN CONFIGURATION ]]--
 RECORD_EVERY = 10 -- Record imput and make a screenshot every # of frames
-PLAY_FOR = 200 -- Target imput and screenshots on this session. Game will end once goal is reached
+PLAY_FOR = 300 -- Target imput and screenshots on this session. Game will end once goal is reached
 USE_MAPPING = true
 --[[ END CONFIGURATION ]]--
 
