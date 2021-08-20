@@ -46,9 +46,9 @@ This project contains *LUA script* files ready to run on BizHawk emulator (teste
 ### Download Pre-trained Weights and Recordings
 Download this data to run the demo. You can also download my recordings to train the models by yourself. These should be *unzipped* into the folder of this repository.
 
-- [Save States](https://drive.google.com/) - LUA scripts will access the *saved states* on `states/[file].state`.
+- [Save States](https://drive.google.com/file/d/1Yh2GAGrdKH6aOy0FPPVk8fZsB4wrjRlX/) - LUA scripts will access the *saved states* on `states/[file].state`.
 - [Weights](https://drive.google.com/) - Python scripts will access the *trained models* on `weights/[model].hdf5`
-- [Recordings (Optional)](https://drive.google.com/) - The recordings should be accessible as `recordings/[recording]/[frame].png`.
+- [Recordings (Optional)](https://drive.google.com/file/d/12Pr6pjZn1EJ_HNvxgYZmXGuHbuGJ-SIv/) - The recordings should be accessible as `recordings/[recording]/[frame].png`.
 
 ## Usage Instructions
 ### Running the Demo
