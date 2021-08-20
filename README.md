@@ -3,8 +3,8 @@
 This repository is part of a Universidad de Sevilla's final degree project.
 
 <p align="center">
-  <img src="./train.gif"/>
-  <img src="./demo.gif"/>
+  <img src="./train.gif"/ width="480">
+  <img src="./demo.gif"/ width="480"> 
 </p>
 
 - [Watch the AI playing](https://www.youtube.com/)
