@@ -1,6 +1,6 @@
 --[[ BEGIN CONFIGURATION ]]--
 RECORD_EVERY = 10 -- Record imput and make a screenshot every # of frames
-PLAY_FOR = 500 -- Target imput and screenshots on this session. Game will end once goal is reached
+PLAY_FOR = 550 -- Target imput and screenshots on this session. Game will end once goal is reached
 USE_MAPPING = true
 --[[ END CONFIGURATION ]]--
 
@@ -41,9 +41,7 @@ while recording_frame < PLAY_FOR do
     steering_file:write(action["P1 X Axis"] .. '\n')
     steering_file:flush()
     recording_frame = recording_frame + 1
-    for i=0, RECORD_EVERY do
-        emu.frameadvance()
-    end
+    for i=0, RECORD_EVERY do emu.frameadvance() end
 
 end
 onexit()
