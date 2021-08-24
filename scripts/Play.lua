@@ -18,6 +18,8 @@ USE_MAPPING = true -- Whether or not to use input remapping.
 
 --[[ END CONFIGURATION ]]--
 
+local chunk_args = {...}
+local PLAY_FOR_FRAMES = chunk_args[1]
 print("Connecting to predict server")
 
 local util = require("util")
@@ -119,6 +121,11 @@ while true do
   joypad.setanalog({["P1 X Axis"] = current_action })
   draw_info()
   emu.frameadvance()
+
+  if PLAY_FOR_FRAMES ~= nil then
+    if PLAY_FOR_FRAMES > 0 then PLAY_FOR_FRAMES = PLAY_FOR_FRAMES - 1
+    elseif PLAY_FOR_FRAMES == 0 then break end
+  end
   frame = frame + 1
 
   if not esc_prev and input.get()['Escape'] then break end
