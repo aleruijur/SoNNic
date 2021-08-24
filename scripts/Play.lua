@@ -8,19 +8,19 @@ frames to play for.
 ]]--
 
 --[[ BEGIN CONFIGURATION ]]--
-USE_CLIPBOARD = true -- Use the clipboard to send screenshots to the predict server.
+USE_CLIPBOARD = false -- Use the clipboard to send screenshots to the predict server.
 
 --[[ How many frames to wait before sending a new prediction request. If you're using a file, you
 may want to consider adding some frames here. ]]--
-WAIT_FRAMES = 0
+WAIT_FRAMES = 2
 
 USE_MAPPING = true -- Whether or not to use input remapping.
-CHECK_PROGRESS_EVERY = 300 -- Check progress after this many frames to detect if we get stuck.
+
 --[[ END CONFIGURATION ]]--
 
 local chunk_args = {...}
 local PLAY_FOR_FRAMES = chunk_args[1]
-if PLAY_FOR_FRAMES ~= nil then print("Playing for " .. PLAY_FOR_FRAMES .. " frames.") end
+print("Connecting to predict server")
 
 local util = require("util")
 
@@ -30,13 +30,13 @@ local tcp = require("lualibs.socket").tcp()
 local success, error = tcp:connect('localhost', 36296)
 if not success then
   print("Failed to connect to server:", error)
+  print("REMEMBER: You must run predict-server.py first!")
   return
 end
 
 client.setscreenshotosd(false)
 
-local course = util.readCourse()
-tcp:send("COURSE:" .. course .. "\n")
+tcp:send("START" .. "\n")
 
 tcp:settimeout(0)
 
@@ -65,7 +65,6 @@ local exit_guid = event.onexit(onexit)
 
 local current_action = 0
 local frame = 1
-local max_progress = util.readProgress()
 local esc_prev = input.get()['Escape']
 
 BOX_CENTER_X, BOX_CENTER_Y = 160, 215
@@ -80,7 +79,7 @@ function draw_info()
               none, 0xFFFF0000)
 end
 
-while util.readProgress() < 3 do
+while true do
 
   -- Process the outgoing message.
   if outgoing_message ~= nil then
@@ -108,7 +107,7 @@ while util.readProgress() < 3 do
       current_action = tonumber(message)
       for i=1, WAIT_FRAMES do
         joypad.set({["P1 A"] = true})
-        joypad.setanalog({["P1 X Axis"] = util.convertSteerToJoystick(current_action) })
+        joypad.setanalog({["P1 X Axis"] = util.convertSteerToJoystick(current_action, USE_MAPPING)})
         draw_info()
         emu.frameadvance()
       end
@@ -119,7 +118,7 @@ while util.readProgress() < 3 do
   end
 
   joypad.set({["P1 A"] = true})
-  joypad.setanalog({["P1 X Axis"] = util.convertSteerToJoystick(current_action) })
+  joypad.setanalog({["P1 X Axis"] = current_action })
   draw_info()
   emu.frameadvance()
 
@@ -127,15 +126,7 @@ while util.readProgress() < 3 do
     if PLAY_FOR_FRAMES > 0 then PLAY_FOR_FRAMES = PLAY_FOR_FRAMES - 1
     elseif PLAY_FOR_FRAMES == 0 then break end
   end
-
   frame = frame + 1
-
-  -- If we haven't made any progress since the last check, just break.
-  if frame % CHECK_PROGRESS_EVERY == 0 then
-    if util.readProgress() <= max_progress then
-      break
-    else max_progress = util.readProgress() end
-  end
 
   if not esc_prev and input.get()['Escape'] then break end
   esc_prev = input.get()['Escape']
