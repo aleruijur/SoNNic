@@ -3,8 +3,9 @@
 This repository is part of a Universidad de Sevilla's final degree project.
 
 <p align="center">
-  <img src="./train.gif"/ width="400">
-  <img src="./demo.gif"/ width="400"> 
+  <img src="./train.gif"/ width="300">
+  <img src="./demo.gif"/ width="300"> 
+  <img src="./predict.gif"/ width="300">
 </p>
 
 - [Watch the AI playing](https://www.youtube.com/)
@@ -67,15 +68,24 @@ These instructions can be used to run a demo of three tracks that the AI perform
 This should automatically play Mute City time attack race.  You can hit the arrow keys to manually steer the Blue Falcon. This can be used to demonstrate the AI's stability.
 
 ### Generate your own training data
-`-`
+The first thing you need to train your model is training data. You can generate training data using `Record.lua` and `RecordImput.lua`.
+1. Open BizHawk and load a F-Zero X ROM.
+2. Open the BizHawk Lua console (Tools > Lua Console).
+3. Load `RecordImput.lua`
+4. Play for a while (I'll recommend to use a joystick or game controller)
+
+A new folder will be created on `recordings`. A screenshot will be stored everytime you move the joystick playing the game with the imput value stored on `steering.txt`
+
 ### Training the Model on Recordings
 Once you have generated new recording, you probably want to try retraining the weights based off your recordings. To train a new model, run `train.py [model]`. You can also use `--cpu` to force it to use the CPU. Your trained model will be stored on `weights/[model].hdf5`
 
 ### Play your trained model on a race
-`-`
+You can load the race savestate from `states/MuteCityGP.state` to test your new trained model.
+Remember to launch `predict-server.py` first and load `Play.lua` from Lua console.
 
 ### Train AI to play on another track
-`-`
+You can use `Record.lua` and `RecordImput.lua` to generate training data for another track. Even for another game!
+Remember to use a different name as parameter when you train your model with `train.py`.
 
 ## Reference Projects
 - [NeuralKart](https://github.com/rameshvarun/NeuralKart) - This project was forked from rameshvarun real time Mario Kart AI.
