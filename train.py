@@ -24,7 +24,7 @@ INPUT_WIDTH = 200
 INPUT_HEIGHT = 66
 INPUT_CHANNELS = 3
 
-VALIDATION_SPLIT = 0.1
+VALIDATION_SPLIT = 0.15
 USE_REVERSE_IMAGES = False
 
 def customized_loss(y_true, y_pred, loss='euclidean'):
