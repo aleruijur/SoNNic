@@ -3,9 +3,9 @@
 This repository is part of a Universidad de Sevilla's final degree project.
 
 <p align="center">
-  <img src="./train.gif"/ width="300">
-  <img src="./demo.gif"/ width="300"> 
-  <img src="./predict.gif"/ width="300">
+  <img src="./train.gif"/ width="310">
+  <img src="./demo.gif"/ width="310"> 
+  <img src="./predict.gif"/ width="310">
 </p>
 
 - [Watch the AI playing](https://www.youtube.com/)
