@@ -54,8 +54,10 @@ Download this data to run the demo. You can also download my recordings to train
 >Recordings file is almost 1GB. It contains >12000 game samples as screenshots.
 
 ## Usage Instructions
+You must run .py files directly from console and .lua files from BizHaw Lua Console. You can find all lua files on `scripts` folder.
+
 ### Running the Demo
-These instructions can be used to run a demo of three tracks that the AI performs well on.
+These instructions can be used to run a demo on Mute City using the `demo` model.
 
 1. Download the save states and pre-trained model.
 2. Run `predict-server.py` using Python - this starts a server on port `36296` which actually runs the model.
