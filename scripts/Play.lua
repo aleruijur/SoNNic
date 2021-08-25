@@ -14,7 +14,7 @@ USE_CLIPBOARD = false -- Use the clipboard to send screenshots to the predict se
 may want to consider adding some frames here. ]]--
 WAIT_FRAMES = 2
 
-USE_MAPPING = true -- Whether or not to use input remapping.
+USE_MAPPING = false -- Whether or not to use input remapping.
 
 --[[ END CONFIGURATION ]]--
 
