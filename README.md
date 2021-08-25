@@ -48,8 +48,10 @@ This project contains *LUA script* files ready to run on BizHawk emulator (teste
 Download this data to run the demo. You can also download my recordings to train the models by yourself. These should be *unzipped* into the folder of this repository.
 
 - [Save States](https://drive.google.com/file/d/1Yh2GAGrdKH6aOy0FPPVk8fZsB4wrjRlX/) - LUA scripts will access the *saved states* on `states/[file].state`.
-- [Weights](https://drive.google.com/) - Python scripts will access the *trained models* on `weights/[model].hdf5`
+- [Weights](https://drive.google.com/file/d/1PkUX3UGLQTdg7otG4OChcrcXBP9skLzV/) - Python scripts will access the *trained models* on `weights/[model].hdf5`
 - [Recordings (Optional)](https://drive.google.com/file/d/12Pr6pjZn1EJ_HNvxgYZmXGuHbuGJ-SIv/) - The recordings should be accessible as `recordings/[recording]/[frame].png`.
+
+>Recordings file is almost 1GB. It contains >12000 game samples as screenshots.
 
 ## Usage Instructions
 ### Running the Demo
@@ -78,6 +80,8 @@ A new folder will be created on `recordings`. A screenshot will be stored everyt
 
 ### Training the Model on Recordings
 Once you have generated new recording, you probably want to try retraining the weights based off your recordings. To train a new model, run `train.py [model]`. You can also use `--cpu` to force it to use the CPU. Your trained model will be stored on `weights/[model].hdf5`
+
+> You can also use train data from train.zip. It contains >12000 samples.
 
 ### Play your trained model on a race
 You can load the race savestate from `states/MuteCityGP.state` to test your new trained model.
