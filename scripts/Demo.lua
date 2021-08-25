@@ -5,7 +5,7 @@ This script plays selected tracks forever in a loop, for purposes of demoing the
 
 --[[ BEGIN CONFIGURATION ]]--
 TRACKS = {'../states/MuteCityTA.state', '../states/MuteCityGP2.state', '../states/MuteCity2.state', '../states/MuteCityGP.state'}
-PLAY_FOR_FRAMES = {2300,500,200,800} -- Number of frames that each track is going to play
+PLAY_FOR_FRAMES = {2300,500,500,800} -- Number of frames that each track is going to play
 --[[ END CONFIGURATION ]]--
 
 local util = require("util")
