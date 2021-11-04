@@ -3,9 +3,9 @@
 This repository is part of a Universidad de Sevilla's final degree project.
 
 <p align="center">
-  <img src="./train.gif"/ width="310">
-  <img src="./demo.gif"/ width="310"> 
-  <img src="./predict.gif"/ width="310">
+  <img src="./train.gif"/ width="260">
+  <img src="./demo.gif"/ width="260"> 
+  <img src="./predict.gif"/ width="260">
 </p>
 
 - [Watch the AI playing](https://www.youtube.com/)
@@ -54,8 +54,10 @@ Download this data to run the demo. You can also download my recordings to train
 >Recordings file is almost 1GB. It contains >12000 game samples as screenshots.
 
 ## Usage Instructions
+You must run .py files directly from console and .lua files from BizHaw Lua Console. You can find all lua files on `scripts` folder.
+
 ### Running the Demo
-These instructions can be used to run a demo of three tracks that the AI performs well on.
+These instructions can be used to run a demo on Mute City using the `demo` model.
 
 1. Download the save states and pre-trained model.
 2. Run `predict-server.py` using Python - this starts a server on port `36296` which actually runs the model.
@@ -81,7 +83,7 @@ A new folder will be created on `recordings`. A screenshot will be stored everyt
 ### Training the Model on Recordings
 Once you have generated new recording, you probably want to try retraining the weights based off your recordings. To train a new model, run `train.py [model]`. You can also use `--cpu` to force it to use the CPU. Your trained model will be stored on `weights/[model].hdf5`
 
-> You can also use train data from train.zip. It contains >12000 samples.
+> You can include train data from train.zip along your own recordings.
 
 ### Play your trained model on a race
 You can load the race savestate from `states/MuteCityGP.state` to test your new trained model.
