@@ -76,7 +76,7 @@ function draw_info()
               none, 0x60FFFFFF)
   gui.drawBox(BOX_CENTER_X + current_action*(BOX_WIDTH / 2) - SLIDER_WIDTH / 2, BOX_CENTER_Y - SLIDER_HIEGHT / 2,
               BOX_CENTER_X + current_action*(BOX_WIDTH / 2) + SLIDER_WIDTH / 2, BOX_CENTER_Y + SLIDER_HIEGHT / 2,
-              none, 0xFFFF0000)
+              none, 0xFF00FF00)
 end
 
 while true do
@@ -118,9 +118,12 @@ while true do
   end
   joypad.set({["P1 A"] = true})
   if current_action > 0.95 or current_action < -0.95 then
-    joypad.setanalog({["P1 X Axis"] = current_action*15})
+    joypad.setanalog({["P1 X Axis"] = current_action*18})
   else
-    joypad.setanalog({["P1 X Axis"] = current_action*35})
+    joypad.setanalog({["P1 X Axis"] = current_action*32})
+  end
+  if WAIT_FRAMES < 1 then
+    joypad.setanalog({["P1 X Axis"] = util.convertSteerToJoystick(current_action, USE_MAPPING)})
   end
   draw_info()
   emu.frameadvance()
