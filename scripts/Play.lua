@@ -12,9 +12,9 @@ USE_CLIPBOARD = false -- Use the clipboard to send screenshots to the predict se
 
 --[[ How many frames to wait before sending a new prediction request. If you're using a file, you
 may want to consider adding some frames here. ]]--
-WAIT_FRAMES = 2
+WAIT_FRAMES = 1
 
-USE_MAPPING = false -- Whether or not to use input remapping.
+USE_MAPPING = true -- Whether or not to use input remapping.
 
 --[[ END CONFIGURATION ]]--
 
@@ -76,7 +76,7 @@ function draw_info()
               none, 0x60FFFFFF)
   gui.drawBox(BOX_CENTER_X + current_action*(BOX_WIDTH / 2) - SLIDER_WIDTH / 2, BOX_CENTER_Y - SLIDER_HIEGHT / 2,
               BOX_CENTER_X + current_action*(BOX_WIDTH / 2) + SLIDER_WIDTH / 2, BOX_CENTER_Y + SLIDER_HIEGHT / 2,
-              none, 0xFFFF0000)
+              none, 0xFF00FF00)
 end
 
 while true do
@@ -116,9 +116,15 @@ while true do
     end
     request_prediction()
   end
-
   joypad.set({["P1 A"] = true})
-  joypad.setanalog({["P1 X Axis"] = current_action })
+  if current_action > 0.95 or current_action < -0.95 then
+    joypad.setanalog({["P1 X Axis"] = current_action*18})
+  else
+    joypad.setanalog({["P1 X Axis"] = current_action*32})
+  end
+  if WAIT_FRAMES < 1 then
+    joypad.setanalog({["P1 X Axis"] = util.convertSteerToJoystick(current_action, USE_MAPPING)})
+  end
   draw_info()
   emu.frameadvance()
 
