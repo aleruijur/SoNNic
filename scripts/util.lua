@@ -128,4 +128,16 @@ function util.smoothSteerToJoystick(steer, use_mapping)
   return math.floor(util.lerp(util.JOYSTICK_MIN, util.JOYSTICK_MAX, alpha))
 end
 
+function util.addInputLine(actions)
+  -- |..|UDLR12|......|
+  local line = "|..|"
+  if actions["P1 Up"] then line = line .. "U" else line = line .. "." end
+  if actions["P1 Down"] then line = line .. "D" else line = line .. "." end
+  if actions["P1 Left"] then line = line .. "L" else line = line .. "." end
+  if actions["P1 Right"] then line = line .. "R" else line = line .. "." end
+  if actions["P1 B1"] then line = line .. "1" else line = line .. "." end
+  if actions["P1 B2"] then line = line .. "2" else line = line .. "." end
+  return line .."|......|"
+end
+
 return util
