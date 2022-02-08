@@ -16,6 +16,8 @@ WAIT_FRAMES = 1
 
 USE_MAPPING = true -- Whether or not to use input remapping.
 
+THRESHOLD = 0.5
+
 --[[ END CONFIGURATION ]]--
 
 local chunk_args = {...}
@@ -104,11 +106,23 @@ while true do
     end
   else
     if message ~= "PREDICTIONERROR" then
-      current_action = tonumber(message)
+      -- Parse the string message to a table of outputs
+      current_action = {}
+      for str in string.gmatch(message, "([^ ]+)") do
+        a, b = str:gsub("%[", ""):gsub("%]", "")
+        table.insert(current_action, tonumber(a))
+      end
+      print(current_action)
+
       for i=1, WAIT_FRAMES do
-        joypad.set({["P1 A"] = true})
-        joypad.setanalog({["P1 X Axis"] = util.convertSteerToJoystick(current_action, USE_MAPPING)})
-        draw_info()
+        -- Translate float outputs to booleans using a thereshold
+        local l, r, b, d
+        if current_action[1] >= THRESHOLD then l = true else l = false end
+        if current_action[2] >= THRESHOLD then r = true else r = false end
+        if current_action[3] >= THRESHOLD then b = true else b = false end
+        if current_action[4] >= THRESHOLD then d = true else d = false end
+        joypad.set({["P1 Left"] = l, ["P1 Right"] = r, ["P1 B1"] = b, ["P1 Down"] = d})
+        --draw_info()
         emu.frameadvance()
       end
     else
@@ -116,7 +130,7 @@ while true do
     end
     request_prediction()
   end
-  joypad.set({["P1 A"] = true})
+  --[[ joypad.set({["P1 A"] = true})
   if current_action > 0.95 or current_action < -0.95 then
     joypad.setanalog({["P1 X Axis"] = current_action*18})
   else
@@ -126,7 +140,7 @@ while true do
     joypad.setanalog({["P1 X Axis"] = util.convertSteerToJoystick(current_action, USE_MAPPING)})
   end
   draw_info()
-  emu.frameadvance()
+  emu.frameadvance() ]]
 
   if PLAY_FOR_FRAMES ~= nil then
     if PLAY_FOR_FRAMES > 0 then PLAY_FOR_FRAMES = PLAY_FOR_FRAMES - 1
