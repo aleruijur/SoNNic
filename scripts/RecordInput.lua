@@ -1,6 +1,6 @@
 --[[ BEGIN CONFIGURATION ]]--
 RECORD_EVERY = 1 -- 10 Record input and make a screenshot every # of frames
-PLAY_FOR = 1500 -- 100 Target input and screenshots on this session. Game will end once goal is reached
+PLAY_FOR = 2000 -- 100 Target input and screenshots on this session. Game will end once goal is reached
 USE_MAPPING = true
 --[[ END CONFIGURATION ]]--
 
