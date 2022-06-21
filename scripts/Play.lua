@@ -12,7 +12,7 @@ USE_CLIPBOARD = false -- Use the clipboard to send screenshots to the predict se
 
 --[[ How many frames to wait before sending a new prediction request. If you're using a file, you
 may want to consider adding some frames here. ]]--
-WAIT_FRAMES = 2
+WAIT_FRAMES = 1
 
 USE_MAPPING = true -- Whether or not to use input remapping.
 

@@ -2,13 +2,13 @@ import numpy as np
 import tensorflow as tf
 from keras.preprocessing.image import img_to_array, load_img
 
-from train import create_model, INPUT_WIDTH, INPUT_HEIGHT, INPUT_CHANNELS
+from train import create_model, INPUT_WIDTH, INPUT_HEIGHT
 import matplotlib.pyplot as plt
 
 img_path=r"recordings/record-3b6f209d-92ab-46d8-c6b5-9fa77fda770a/454.png"
 #"recordings/record-3b6f209d-92ab-46d8-c6b5-9fa77fda770a/183.png 454"
 #"recordings\record-2d61d69a-66c2-4d2b-cddc-ea39c0c1ac97\396.png"
-weights_file = 'weights/{}.hdf5'.format("lowConv")
+weights_file = 'weights/{}.hdf5'.format("level1")
 
 model = create_model(keep_prob=1)
 #model.summary()

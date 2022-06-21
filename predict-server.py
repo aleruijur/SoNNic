@@ -1,4 +1,4 @@
-import sys, time, logging, os, argparse
+import sys, logging, os, argparse
 
 import numpy as np
 from PIL import Image, ImageGrab

@@ -1,6 +1,5 @@
 import glob
 import os
-import hashlib
 import argparse
 from mkdir_p import mkdir_p
 
@@ -12,7 +11,6 @@ from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten
 from keras.layers import Conv2D, MaxPooling2D
 from keras.layers import BatchNormalization
-from keras import optimizers
 from keras import backend as K
 from keras.callbacks import ModelCheckpoint, EarlyStopping
 
@@ -22,22 +20,52 @@ from sklearn.model_selection import train_test_split
 OUT_SHAPE = 4
 
 # Height and Width of model input. For RGB images, use 3 channels
-INPUT_WIDTH = 200#256
-INPUT_HEIGHT = 78#192 - 66
+INPUT_WIDTH = 256
+INPUT_HEIGHT = 192
 INPUT_CHANNELS = 3
-
-# Percentage of validation split. Set to a higher value when you have large training data.
-VALIDATION_SPLIT = 0.15
-# Data augmentation not tested
-USE_REVERSE_IMAGES = False
 
 def customized_loss(y_true, y_pred):
     y_true = tf.cast(y_true, dtype=tf.float32)
     val = K.mean(K.square((y_pred - y_true)), axis=-1)
     return val
+
+def dyn_weighted_bincrossentropy(true, pred):
+    """
+    Calculates weighted binary cross entropy. The weights are determined dynamically
+    by the balance of each category. This weight is calculated for each batch.
+    
+    The weights are calculted by determining the number of 'pos' and 'neg' classes 
+    in the true labels, then dividing by the number of total predictions.
+    
+    For example if there is 1 pos class, and 99 neg class, then the weights are 1/100 and 99/100.
+    These weights can be applied so false negatives are weighted 99/100, while false postives are weighted
+    1/100. This prevents the classifier from labeling everything negative and getting 99% accuracy.
+    
+    This can be useful for unbalanced catagories.
+    """
+    true = tf.cast(true, dtype=tf.float32)
+    # get the total number of inputs
+    num_pred = K.sum(K.cast(pred < 0.5, true.dtype)) + K.sum(true)
+    
+    # get weight of values in 'pos' category
+    zero_weight =  K.sum(true)/ num_pred +  K.epsilon() 
+    
+    # get weight of values in 'false' category
+    one_weight = K.sum(K.cast(pred < 0.5, true.dtype)) / num_pred +  K.epsilon()
+
+    # calculate the weight vector
+    weights =  (1.0 - true) * zero_weight +  true * one_weight 
+    
+    # calculate the binary cross entropy
+    bin_crossentropy = K.binary_crossentropy(true, pred)
+    
+    # apply the weights
+    weighted_bin_crossentropy = weights * bin_crossentropy 
+
+    return K.mean(weighted_bin_crossentropy)
     
 # Create CNN, check kep_prob parameter since it controls dropout layers
-def create_model(keep_prob=0.6):
+def create_model(keep_prob=0.8):
     # Keras sequential model
     model = Sequential()
 
@@ -45,20 +73,7 @@ def create_model(keep_prob=0.6):
     model.add(BatchNormalization(input_shape=(INPUT_HEIGHT, INPUT_WIDTH, INPUT_CHANNELS)))
 
     # Convolutional layers
-    """ model.add(Conv2D(24, kernel_size=(5, 5), strides=(2, 2), activation='relu'))
-    model.add(BatchNormalization())
-    model.add(Conv2D(36, kernel_size=(5, 5), strides=(2, 2), activation='relu'))
-    model.add(BatchNormalization())
-    model.add(Conv2D(48, kernel_size=(5, 5), strides=(2, 2), activation='relu'))
-    model.add(BatchNormalization())
-    model.add(Conv2D(64, kernel_size=(3, 3), activation='relu'))
-    model.add(BatchNormalization())
-    model.add(Conv2D(64, kernel_size=(3, 3), activation='relu')) """
-
-    model.add(Conv2D(8, kernel_size=(3, 3), activation='relu'))
-    model.add(MaxPooling2D(pool_size = (2,2)))
-    model.add(BatchNormalization())
-    model.add(Conv2D(8, kernel_size=(3, 3), activation='relu'))
+    model.add(Conv2D(16, kernel_size=(3, 3), activation='relu'))
     model.add(MaxPooling2D(pool_size = (2,2)))
     model.add(BatchNormalization())
     model.add(Conv2D(16, kernel_size=(3, 3), activation='relu'))
@@ -68,23 +83,17 @@ def create_model(keep_prob=0.6):
     model.add(MaxPooling2D(pool_size = (2,2)))
     model.add(BatchNormalization())
     model.add(Conv2D(32, kernel_size=(3, 3), activation='relu'))
+    model.add(MaxPooling2D(pool_size = (2,2)))
+    model.add(BatchNormalization())
+    model.add(Conv2D(32, kernel_size=(3, 3), activation='relu'))
 
     # Dense layers
     model.add(Flatten())
-    """ model.add(Dense(1164, activation='relu'))
-    drop_out = 1 - keep_prob
-    model.add(Dropout(drop_out))
-    model.add(Dense(100, activation='relu'))
-    model.add(Dropout(drop_out))
-    model.add(Dense(50, activation='relu'))
-    model.add(Dropout(drop_out))
-    model.add(Dense(10, activation='relu'))
-    model.add(Dropout(drop_out)) """
 
-    model.add(Dense(4000, activation='relu'))
+    model.add(Dense(3000, activation='relu'))
     drop_out = 1 - keep_prob
     model.add(Dropout(drop_out))
-    model.add(Dense(4000, activation='relu'))
+    model.add(Dense(1500, activation='relu'))
     model.add(Dropout(drop_out))
 
     # Output layer
@@ -92,25 +101,18 @@ def create_model(keep_prob=0.6):
 
     return model
 
-# Function to mix validation and training sets
-def is_validation_set(string):
-    string_hash = hashlib.md5(string.encode('utf-8')).digest()
-    return int.from_bytes(string_hash[:2], byteorder='big') / 2 ** 16 > VALIDATION_SPLIT
-
 # Load images and inputs files from recordings folder
 def load_training_data():
     X_train, y_train = [], []
     X_val, y_val = [], []
 
-    #images = []
+    images = []
     all_inputs = []
 
     # Recordings folder
     recordings = glob.iglob("recordings//*")
     # Iterates every folder on recordings
-    i=1
     for recording in recordings:
-        images = []
         # Check for all png files in folder
         filenames = list(glob.iglob('{}/*.png'.format(recording)))
         filenames.sort(key=lambda f: int(os.path.basename(f)[:-4]))
@@ -129,36 +131,7 @@ def load_training_data():
         assert len(filenames) == len(
             inputs_list), "For recording %s, the number of inputs values does not match the number of images." % recording
 
-        """ # Now we're iterating for every pair of image and input line
-        for file, inputs in zip(filenames, inputs_list):
-            # Use as validation set if this function is true
-            valid = is_validation_set(file)
-
-            # Process image and convert to input array
-            im = Image.open(file).resize((INPUT_WIDTH, INPUT_HEIGHT))
-            im_arr = np.frombuffer(im.tobytes(), dtype=np.uint8)
-            im_arr = im_arr.reshape((INPUT_HEIGHT, INPUT_WIDTH, INPUT_CHANNELS))
-
-            if valid:
-                X_train.append(im_arr)
-                y_train.append(inputs)
-            else:
-                X_val.append(im_arr)
-                y_val.append(inputs) """
-
-        """ print(len(images))
-        images = np.asarray(images)
-        inputs_list = np.asarray(inputs_list) """
-
-        if i==9 or i==10 or i==19 or i==20: #TEMPORAL
-            X_val.extend(images)
-            y_val.extend(inputs_list)
-        else:
-            X_train.extend(images)
-            y_train.extend(inputs_list)
-        i+=1
-
-    #X_train, X_val, y_train, y_val = train_test_split(images, all_inputs, test_size=0.20, random_state=27)
+    X_train, X_val, y_train, y_val = train_test_split(images, all_inputs, test_size=0.20, random_state=538)
 
     # Check for missing images or missing lines on inputs files
     assert len(X_train) == len(y_train)
@@ -197,8 +170,8 @@ if __name__ == '__main__':
     if os.path.isfile(weights_file):
         model.load_weights(weights_file)
 
-    #customized_loss
-    model.compile(loss="binary_crossentropy", optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001))
+    #"binary_crossentropy"
+    model.compile(loss=dyn_weighted_bincrossentropy, optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001))
     checkpointer = ModelCheckpoint(
         monitor='val_loss', filepath=weights_file, verbose=1, save_best_only=True, mode='min')
     earlystopping = EarlyStopping(monitor='val_loss', patience=5)
