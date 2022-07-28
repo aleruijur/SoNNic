@@ -30,6 +30,16 @@ end
 
 local exit_guid = event.onexit(onexit)
 
+function addInputLine(actions)
+  -- LR1D
+  local line = ""
+  if actions["P1 Left"] then line = line .. "1" else line = line .. "0" end
+  if actions["P1 Right"] then line = line .. "1" else line = line .. "0" end
+  if actions["P1 B1"] then line = line .. "1" else line = line .. "0" end
+  if actions["P1 Down"] then line = line .. "1" else line = line .. "0" end
+  return line
+end
+
 local recording_frame = 1
 
 local inputs_file = io.open(RECORDING_FOLDER .. '\\inputs.txt', 'a')
@@ -42,7 +52,7 @@ while recording_frame < PLAY_FOR do
 
     if start then 
       client.screenshot(RECORDING_FOLDER .. '\\' .. recording_frame .. '.png')
-      inputs_file:write(util.addInputLine(action) .. '\n')
+      inputs_file:write(addInputLine(action) .. '\n')
       inputs_file:flush()
       recording_frame = recording_frame + 1
     end

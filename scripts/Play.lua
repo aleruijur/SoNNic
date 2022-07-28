@@ -69,18 +69,6 @@ local current_action = 0
 local frame = 1
 local esc_prev = input.get()['Escape']
 
-BOX_CENTER_X, BOX_CENTER_Y = 160, 215
-BOX_WIDTH, BOX_HEIGHT = 100, 4
-SLIDER_WIDTH, SLIDER_HIEGHT = 4, 16
-function draw_info()
-  gui.drawBox(BOX_CENTER_X - BOX_WIDTH / 2, BOX_CENTER_Y - BOX_HEIGHT / 2,
-              BOX_CENTER_X + BOX_WIDTH / 2, BOX_CENTER_Y + BOX_HEIGHT / 2,
-              none, 0x60FFFFFF)
-  gui.drawBox(BOX_CENTER_X + current_action*(BOX_WIDTH / 2) - SLIDER_WIDTH / 2, BOX_CENTER_Y - SLIDER_HIEGHT / 2,
-              BOX_CENTER_X + current_action*(BOX_WIDTH / 2) + SLIDER_WIDTH / 2, BOX_CENTER_Y + SLIDER_HIEGHT / 2,
-              none, 0xFF00FF00)
-end
-
 while true do
 
   -- Process the outgoing message.
@@ -112,7 +100,6 @@ while true do
         a, b = str:gsub("%[", ""):gsub("%]", "")
         table.insert(current_action, tonumber(a))
       end
-      print(current_action)
 
       for i=1, WAIT_FRAMES do
         -- Translate float outputs to booleans using a thereshold
@@ -122,7 +109,13 @@ while true do
         if current_action[3] >= THRESHOLD then b = true else b = false end
         if current_action[4] >= THRESHOLD then d = true else d = false end
         joypad.set({["P1 Left"] = l, ["P1 Right"] = r, ["P1 B1"] = b, ["P1 Down"] = d})
-        --draw_info()
+        
+        print("P1 Left: " .. l, "(" .. current_action[1] .. ")")
+        print("P1 Right: " .. r, "(" .. current_action[2] .. ")")
+        print("P1 B1: " .. b, "(" .. current_action[3] .. ")")
+        print("P1 Down: " .. d, "(" .. current_action[4] .. ")")
+        print("--------------------------")
+
         emu.frameadvance()
       end
     else
@@ -130,17 +123,6 @@ while true do
     end
     request_prediction()
   end
-  --[[ joypad.set({["P1 A"] = true})
-  if current_action > 0.95 or current_action < -0.95 then
-    joypad.setanalog({["P1 X Axis"] = current_action*18})
-  else
-    joypad.setanalog({["P1 X Axis"] = current_action*32})
-  end
-  if WAIT_FRAMES < 1 then
-    joypad.setanalog({["P1 X Axis"] = util.convertSteerToJoystick(current_action, USE_MAPPING)})
-  end
-  draw_info()
-  emu.frameadvance() ]]
 
   if PLAY_FOR_FRAMES ~= nil then
     if PLAY_FOR_FRAMES > 0 then PLAY_FOR_FRAMES = PLAY_FOR_FRAMES - 1

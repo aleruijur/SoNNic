@@ -170,7 +170,6 @@ if __name__ == '__main__':
     if os.path.isfile(weights_file):
         model.load_weights(weights_file)
 
-    #"binary_crossentropy"
     model.compile(loss=dyn_weighted_bincrossentropy, optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001))
     checkpointer = ModelCheckpoint(
         monitor='val_loss', filepath=weights_file, verbose=1, save_best_only=True, mode='min')
