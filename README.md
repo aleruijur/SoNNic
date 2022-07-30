@@ -1,5 +1,5 @@
-# N-ZeroX
-(Neural)-Zero X is an AI that can play F-Zero X on BizHawk emulator using real time CNNs.
+# SoNNic The Convolutional Network
+SoNNic is an AI that can play Sonic The Hedgehog (Sega Master System) on BizHawk emulator using real time CNNs.
 This repository is part of a Universidad de Sevilla's final degree project.
 
 <p align="center">
@@ -42,7 +42,7 @@ Although you can run Tensorflow on CPU, I'll recommend you to download and insta
 
 This project contains *LUA script* files ready to run on BizHawk emulator (tested on version 2.6.2). To get BizHawk you first need to install the [prerequisites](https://github.com/TASVideos/BizHawk-Prereqs/releases/tag/2.4.8_1). Then you can download [BizHawk](https://github.com/TASVideos/BizHawk/releases/tag/2.6.2) and unzip it to any directory.
 
->You will also need a F-Zero X ROM to run on BizHawk emulator.
+>You will also need a Sonic The Hedgehog ROM of the Sega Master System version to run on BizHawk emulator.
 
 ### Download Pre-trained Weights and Recordings
 Download this data to run the demo. You can also download my recordings to train the models by yourself. These should be *unzipped* into the folder of this repository.
@@ -72,13 +72,13 @@ These instructions can be used to run a demo on Mute City using the `demo` model
 This should automatically play Mute City time attack race.  You can hit the arrow keys to manually steer the Blue Falcon. This can be used to demonstrate the AI's stability.
 
 ### Generate your own training data
-The first thing you need to train your model is training data. You can generate training data using `Record.lua` and `RecordImput.lua`.
-1. Open BizHawk and load a F-Zero X ROM.
+The first thing you need to train your model is training data. You can generate training data using `RecordInput.lua`.
+1. Open BizHawk and load a Sonic The Hedgehog ROM.
 2. Open the BizHawk Lua console (Tools > Lua Console).
-3. Load `RecordImput.lua`
-4. Play for a while (I'll recommend to use a joystick or game controller)
+3. Load `RecordInput.lua`
+4. Play for a while
 
-A new folder will be created on `recordings`. A screenshot will be stored everytime you move the joystick playing the game with the imput value stored on `steering.txt`
+A new folder will be created on `recordings`. A screenshot will be stored every frame after you start playing the game with the binary values stored on `inputs.txt`
 
 ### Training the Model on Recordings
 Once you have generated new recording, you probably want to try retraining the weights based off your recordings. To train a new model, run `train.py [model]`. You can also use `--cpu` to force it to use the CPU. Your trained model will be stored on `weights/[model].hdf5`
@@ -86,11 +86,11 @@ Once you have generated new recording, you probably want to try retraining the w
 > You can include train data from train.zip along your own recordings.
 
 ### Play your trained model on a race
-You can load the race savestate from `states/MuteCityGP.state` to test your new trained model.
+You can load the levels savestates from `states/Acto1.state` or `states/Acto3.state` to test your new trained model.
 Remember to launch `predict-server.py` first and load `Play.lua` from Lua console.
 
 ### Train AI to play on another track
-You can use `Record.lua` and `RecordImput.lua` to generate training data for another track. Even for another game!
+You can use `RecordInput.lua` to generate training data for another level. Even for another game!
 Remember to use a different name as parameter when you train your model with `train.py`.
 
 ## Reference Projects
