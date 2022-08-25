@@ -110,11 +110,11 @@ while true do
         if current_action[4] >= THRESHOLD then d = true else d = false end
         joypad.set({["P1 Left"] = l, ["P1 Right"] = r, ["P1 B1"] = b, ["P1 Down"] = d})
         
-        print("P1 Left: " .. l, "(" .. current_action[1] .. ")")
-        print("P1 Right: " .. r, "(" .. current_action[2] .. ")")
-        print("P1 B1: " .. b, "(" .. current_action[3] .. ")")
-        print("P1 Down: " .. d, "(" .. current_action[4] .. ")")
-        print("--------------------------")
+        print("P1 Left:", l, "(" .. current_action[1] .. ")")
+        print("P1 Right:", r, "(" .. current_action[2] .. ")")
+        print("P1 B1:   ", b, "(" .. current_action[3] .. ")")
+        print("P1 Down:", d, "(" .. current_action[4] .. ")")
+        print("----------------------------------------")
 
         emu.frameadvance()
       end
