@@ -7,7 +7,7 @@ This repository is part of a Universidad de Sevilla's final degree project.
   <img src="./predict.gif"/ width="260">
 </p>
 
-- [Watch the AI playing](https://www.youtube.com/)
+- [Watch the AI playing](https://www.youtube.com/watch?v=Sx6vTaZBBg0)
 - [Final Degree Project document](https://drive.google.com/)
 
 ## Set-up environtment
@@ -15,13 +15,13 @@ This repository is part of a Universidad de Sevilla's final degree project.
 To run this project, you need **Python 3** and **Bizhawk** emulator.
 
 ### Install 64-bit Python 3
-This project was written for [Python 3.7](https://www.python.org/ftp/python/3.7.9/python-3.7.9-amd64.exe). Tensorflow requires **64-bit Python**.
+This project was written for [Python 3.9](https://www.python.org/ftp/python/3.9.7/python-3.9.7-amd64.exe). Tensorflow requires **64-bit Python**.
 
 ### Install Python Dependencies
 The following Python **dependencies** need to be installed.
 
-- Tensorflow 2.2.0
-- Keras 2.3.1
+- Tensorflow 2.7.0
+- Keras 2.7.0
 - Pillow
 - matplotlib
 - mkdir_p
@@ -32,48 +32,36 @@ Although you can run Tensorflow on CPU, I'll recommend you to download and insta
 
 |TensorFlow|Python|cuDNN|CUDA|
 |----------|------|-----|----|
-|2.2.0|3.5 to 3.8|7.6|10.1|
+|2.7.0|3.5 to 3.9|7.6|10.1|
 
 - [Get CUDA](https://developer.nvidia.com/cuda-toolkit-archive)
 - [Get cuDNN](https://developer.nvidia.com/rdp/cudnn-archive) (you will need an nvidia account to access)
 
 ### Get BizHawk emulator
 
-This project contains *LUA script* files ready to run on BizHawk emulator (tested on version 2.6.2). To get BizHawk you first need to install the [prerequisites](https://github.com/TASVideos/BizHawk-Prereqs/releases/tag/2.4.8_1). Then you can download [BizHawk](https://github.com/TASVideos/BizHawk/releases/tag/2.6.2) and unzip it to any directory.
+This project contains *LUA script* files ready to run on BizHawk emulator (tested on version 2.7). To get BizHawk you first need to install the [prerequisites](https://github.com/TASVideos/BizHawk-Prereqs/releases/tag/2.4.8_1). Then you can download [BizHawk](https://github.com/TASEmulators/BizHawk/releases/tag/2.7) and unzip it to any directory.
 
 >You will also need a Sonic The Hedgehog ROM of the Sega Master System version to run on BizHawk emulator.
-
-### Download Pre-trained Weights and Recordings
-Download this data to run the demo. You can also download my recordings to train the models by yourself. These should be *unzipped* into the folder of this repository.
-
-- [Save States](https://drive.google.com/file/d/1Yh2GAGrdKH6aOy0FPPVk8fZsB4wrjRlX/) - LUA scripts will access the *saved states* on `states/[file].state`.
-- [Weights](https://drive.google.com/file/d/1PkUX3UGLQTdg7otG4OChcrcXBP9skLzV/) - Python scripts will access the *trained models* on `weights/[model].hdf5`
-- [Recordings (Optional)](https://drive.google.com/file/d/12Pr6pjZn1EJ_HNvxgYZmXGuHbuGJ-SIv/) - The recordings should be accessible as `recordings/[recording]/[frame].png`.
-
->Recordings file is almost 1GB. It contains >12000 game samples as screenshots.
 
 ## Usage Instructions
 You must run .py files directly from console and .lua files from BizHaw Lua Console. You can find all lua files on `scripts` folder.
 
-### Running the Demo
-These instructions can be used to run a demo on Mute City using the `demo` model.
+### Running the Project
+These instructions can be used to run the project using the `level1` or `level3` model.
 
-1. Download the save states and pre-trained model.
-2. Run `predict-server.py` using Python - this starts a server on port `36296` which actually runs the model.
-    - You must specify the model you want to run. Use `demo` as first parameter.
+1. Run `predict-server.py` using Python or Docker - this starts a server on port `36296` which actually runs the model.
+    - You must specify the model you want to run. Use `level1` or `level3` as first parameter.
     - You can pass a `--cpu` to force Tensorflow to run on the CPU.
-3. Open BizHawk and load a F-Zero X ROM.
-4. Turn off messages (View > Display Messages).
-    - You don't have to do this, but they get in the way.
-4. Open the BizHawk Lua console (Tools > Lua Console).
-5. Load `Demo.lua`
-
-This should automatically play Mute City time attack race.  You can hit the arrow keys to manually steer the Blue Falcon. This can be used to demonstrate the AI's stability.
+2. Open BizHawk and load a Sonic The Hedgehog ROM.
+3. Open the BizHawk Lua console (Tools > Lua Console).
+4. Load `ScriptHawk.lua` and click the hitbox checkbox.
+5. Load `Play.lua`
 
 ### Generate your own training data
 The first thing you need to train your model is training data. You can generate training data using `RecordInput.lua`.
 1. Open BizHawk and load a Sonic The Hedgehog ROM.
 2. Open the BizHawk Lua console (Tools > Lua Console).
+4. Load `ScriptHawk.lua` and click the hitbox checkbox.
 3. Load `RecordInput.lua`
 4. Play for a while
 
@@ -88,7 +76,7 @@ Once you have generated new recording, you probably want to try retraining the w
 You can load the levels savestates from `states/Acto1.state` or `states/Acto3.state` to test your new trained model.
 Remember to launch `predict-server.py` first and load `Play.lua` from Lua console.
 
-### Train AI to play on another track
+### Train AI to play on another level
 You can use `RecordInput.lua` to generate training data for another level. Even for another game!
 Remember to use a different name as parameter when you train your model with `train.py`.
 
