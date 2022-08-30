@@ -1,4 +1,4 @@
-import sys, time, logging, os, argparse
+import sys, logging, os, argparse
 
 import numpy as np
 from PIL import Image, ImageGrab
@@ -45,7 +45,7 @@ class TCPHandler(StreamRequestHandler):
             if message.startswith("PREDICT:"):
                 im = Image.open(message[8:])
                 prediction = model.predict(prepare_image(im), batch_size=1)[0]
-                self.wfile.write((str(prediction[0]) + "\n").encode('utf-8'))
+                self.wfile.write((str(prediction) + "\n").encode('utf-8'))
 
 if __name__ == "__main__":
     # Parameters grab
