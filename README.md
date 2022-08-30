@@ -7,8 +7,13 @@ This repository is part of a Universidad de Sevilla's final degree project.
   <img src="./predict.gif"/ width="260">
 </p>
 
+<<<<<<< HEAD
 - [Watch the AI playing](https://www.youtube.com/watch?v=Sx6vTaZBBg0)
 - [Final Degree Project document](https://drive.google.com/)
+=======
+- [Watch the AI playing](https://youtu.be/rlxYzACLqII)
+- [Final Degree Project document](https://drive.google.com/file/d/17g6lHZv4_KuwYz-wSBbuOEllR-WrkrtG)
+>>>>>>> master
 
 ## Set-up environtment
 
