@@ -70,8 +70,6 @@ A new folder will be created on `recordings`. A screenshot will be stored every 
 ### Training the Model on Recordings
 Once you have generated new recording, you probably want to try retraining the weights based off your recordings. To train a new model, run `train.py [model]`. You can also use `--cpu` to force it to use the CPU. Your trained model will be stored on `weights/[model].hdf5`
 
-> You can include train data from train.zip along your own recordings.
-
 ### Play your trained model on a race
 You can load the levels savestates from `states/Acto1.state` or `states/Acto3.state` to test your new trained model.
 Remember to launch `predict-server.py` first and load `Play.lua` from Lua console.
