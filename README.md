@@ -3,7 +3,6 @@ SoNNic is an AI that can play Sonic The Hedgehog (Sega Master System) on BizHawk
 This repository is part of a Universidad de Sevilla's final degree project.
 
 <p align="center">
-  <img src="./train.gif"/ width="260">
   <img src="./demo.gif"/ width="260"> 
   <img src="./predict.gif"/ width="260">
 </p>
@@ -95,4 +94,4 @@ Remember to use a different name as parameter when you train your model with `tr
 
 ## Reference Projects
 - [NeuralKart](https://github.com/rameshvarun/NeuralKart) - This project was forked from rameshvarun real time Mario Kart AI.
-- [TensorKart](https://github.com/kevinhughes27/TensorKart) - The first MarioKart deep learning project, used for reference.
+- [ScriptHawk](https://github.com/isotarge/ScriptHawk) - A collection of Lua scripts for BizHawk providing tools to assist TASing.
